@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,3 +29,10 @@ Route::post('actionlogin', [AuthController::class, 'actionlogin'])->name('action
 Route::get('/logout', [AuthController::class, 'actionlogout']);
 
 Route::get('/home', [AdminController::class, 'index']);
+
+Route::get('/dashboard', function () {
+    $data = ['content' => 'dashboard.dashboard'];
+    return view('template.wrapper', $data);
+});
+
+Route::resource('/users', AdminUserController::class);

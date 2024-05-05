@@ -8,6 +8,7 @@ class AdminController extends Controller
 {
     public function index()
     {
-        return view('admin.admin');
+        $data = ['content' => ''];
+        return view('template.wrapper', $data);
     }
 }
