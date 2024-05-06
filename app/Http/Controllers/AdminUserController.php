@@ -3,15 +3,23 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class AdminUserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $data = ['content' => 'users.index'];
+        $users = $this->readAllUser();
+        $utilityController = app(UtilityController::class);
+        $paginator = $utilityController->generatePaginator($users);
+
+        $data = [
+            'content' => 'users.index',
+            'datas' => $paginator,
+
+        ];
+
         return view('template.wrapper', $data);
     }
 
@@ -61,5 +69,10 @@ class AdminUserController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function readAllUser()
+    {
+        return DB::select("CALL sp_user_read_all()");
     }
 }
