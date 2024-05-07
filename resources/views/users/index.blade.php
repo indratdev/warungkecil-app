@@ -2,8 +2,15 @@
 
     <div class="card-header d-flex justify-content-between align-items-center">
         <h3 class="card-title">Management User</h3>
-        <button type="button" class="btn bg-gradient-primary ml-auto">New User</button>
+        <button type="button" class="btn bg-gradient-primary ml-auto"><a href="/users/create">New User</a> </button>
     </div>
+
+    @if ($message = Session::get('success'))
+        <div class="alert alert-success alert-block">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <strong>{{ $message }}</strong>
+        </div>
+    @endif
 
 
     <div class="card-body">
@@ -26,10 +33,19 @@
                         <td> {{ $user->email }}</td>
                         <td> {{ $user->role_user }}</td>
                         <td> {{ $user->created_at }}</td>
-                        <td style="display: flex; gap: 10px;">
-                            <button type="button" class="btn bg-gradient-primary">Edit</button>
-                            <button type="button" class="btn bg-gradient-info">Detail</button>
-                            <button type="button" class="btn bg-gradient-danger">Hapus</button>
+                        <td class="project-actions text-right">
+                            <a class="btn btn-primary btn-sm" href="#">
+                                <i class="fas fa-folder"></i>
+                                View
+                            </a>
+                            <a class="btn btn-info btn-sm" href="#">
+                                <i class="fas fa-pencil-alt"></i>
+                                Edit
+                            </a>
+                            <a class="btn btn-danger btn-sm" href="#">
+                                <i class="fas fa-trash"></i>
+                                Delete
+                            </a>
                         </td>
                     </tr>
                 @endforeach

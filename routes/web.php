@@ -35,4 +35,6 @@ Route::get('/dashboard', function () {
     return view('template.wrapper', $data);
 });
 
-Route::resource('/users', AdminUserController::class);
+Route::resource('users', AdminUserController::class);
+Route::resource('create', AdminUserController::class);
+// Route::get('/users/create', [AdminUserController::class, 'create']);
