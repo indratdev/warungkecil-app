@@ -40,4 +40,9 @@ class AuthController extends Controller
         Auth::logout();
         return redirect('/');
     }
+
+    public function registerProject()
+    {
+        return view('register.register');
+    }
 }

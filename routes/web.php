@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProjectController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,6 +24,11 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/admin', 'AdminController@index');
 
 Route::get('/', [AuthController::class, 'index']);
+
+
+// register
+Route::get('/register', [AuthController::class, 'registerProject']);
+Route::post('actionRegisterProjectAndUser', [ProjectController::class, 'createProjectAndUserAdmin'])->name('actionRegisterProjectAndUser');
 
 Route::post('actionlogin', [AuthController::class, 'actionlogin'])->name('actionlogin');
 
