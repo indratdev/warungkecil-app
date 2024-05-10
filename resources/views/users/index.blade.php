@@ -2,7 +2,7 @@
 
     <div class="card-header d-flex justify-content-between align-items-center">
         <h3 class="card-title">Management User</h3>
-        <button type="button" class="btn bg-gradient-primary ml-auto"><a href="/users/create">New User</a> </button>
+        <button type="button" class="btn bg-gradient-primary ml-auto"><a href="/users/create">New User </a></button>
     </div>
 
     @if ($message = Session::get('success'))
@@ -35,16 +35,16 @@
                         <td> {{ $user->created_at }}</td>
                         <td class="project-actions text-right">
                             <a class="btn btn-primary btn-sm" href="#">
-                                <i class="fas fa-folder"></i>
-                                View
+                                <i class="fas fa-eye"></i>
+                                {{-- View --}}
                             </a>
-                            <a class="btn btn-info btn-sm" href="#">
+                            <a class="btn btn-info btn-sm" href="/users/{{ $user->id }}/edit">
                                 <i class="fas fa-pencil-alt"></i>
-                                Edit
+                                {{-- Edit --}}
                             </a>
                             <a class="btn btn-danger btn-sm" href="#">
                                 <i class="fas fa-trash"></i>
-                                Delete
+                                {{-- Delete --}}
                             </a>
                         </td>
                     </tr>

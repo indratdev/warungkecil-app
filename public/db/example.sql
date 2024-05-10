@@ -43,17 +43,45 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `migration` varchar(255) NOT NULL,
   `batch` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table wkposdb.migrations: ~4 rows (approximately)
+-- Dumping data for table wkposdb.migrations: ~5 rows (approximately)
 DELETE FROM `migrations`;
 /*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
-	(17, '2014_10_12_000000_create_users_table', 1),
-	(18, '2014_10_12_100000_create_password_reset_tokens_table', 1),
-	(19, '2019_08_19_000000_create_failed_jobs_table', 1),
-	(20, '2019_12_14_000001_create_personal_access_tokens_table', 1);
+	(36, '2014_10_12_000000_create_users_table', 1),
+	(37, '2014_10_12_100000_create_password_reset_tokens_table', 1),
+	(38, '2019_08_19_000000_create_failed_jobs_table', 1),
+	(39, '2019_12_14_000001_create_personal_access_tokens_table', 1),
+	(40, '2024_05_08_071258_create_master_projects_table', 1);
 /*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
+
+-- Dumping structure for table wkposdb.m_project
+DROP TABLE IF EXISTS `m_project`;
+CREATE TABLE IF NOT EXISTS `m_project` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `owner_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `branch_name` varchar(255) DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `province` varchar(255) DEFAULT NULL,
+  `city` varchar(255) DEFAULT NULL,
+  `zipcode` varchar(255) DEFAULT NULL,
+  `npwp` varchar(255) DEFAULT NULL,
+  `phone` varchar(255) DEFAULT NULL,
+  `active` int(11) NOT NULL DEFAULT 1,
+  `deleted` int(11) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table wkposdb.m_project: ~1 rows (approximately)
+DELETE FROM `m_project`;
+/*!40000 ALTER TABLE `m_project` DISABLE KEYS */;
+INSERT INTO `m_project` (`id`, `owner_id`, `name`, `branch_name`, `address`, `province`, `city`, `zipcode`, `npwp`, `phone`, `active`, `deleted`, `created_at`, `updated_at`) VALUES
+	(1, 1, 'PT SUKASARI', 'PT SUKASARI', NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, NULL, NULL);
+/*!40000 ALTER TABLE `m_project` ENABLE KEYS */;
 
 -- Dumping structure for table wkposdb.password_reset_tokens
 DROP TABLE IF EXISTS `password_reset_tokens`;
@@ -166,6 +194,26 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure wkposdb.sp_user_read_by_email
+DROP PROCEDURE IF EXISTS `sp_user_read_by_email`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_user_read_by_email`(
+	IN `param_email` VARCHAR(255)
+
+)
+BEGIN
+ SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+
+    SELECT *
+FROM users
+WHERE email LIKE CONCAT('%', param_email, '%');
+
+    
+    SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+
+END//
+DELIMITER ;
+
 -- Dumping structure for procedure wkposdb.sp_user_read_userExist
 DROP PROCEDURE IF EXISTS `sp_user_read_userExist`;
 DELIMITER //
@@ -211,18 +259,18 @@ CREATE TABLE IF NOT EXISTS `users` (
 DELETE FROM `users`;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `role_user`, `birth_date`, `gender`, `phone`, `address`, `remember_token`, `created_at`, `updated_at`) VALUES
-	(1, 'Test User', 'admin@admin.com', '2024-05-07 09:00:26', '$2y$12$miByfXEk5jITxiypR0Sb9Oz6iG0c7mHq5y7M.4R2uY0TdCq1m/L0O', 'admin', NULL, NULL, NULL, NULL, '9uUVbdA4NV', '2024-05-07 09:00:27', '2024-05-07 09:00:27'),
-	(2, 'Lorena Schinner', 'pablo63@example.com', '2024-05-07 09:00:27', '$2y$12$Y8tFhZX6VJmPOHZbM2kZYungp0fiPY6hYxKrfYTkP4Bn5nIlLR5xC', 'staff', NULL, NULL, NULL, NULL, 'hC1UYSCOIh', '2024-05-07 09:00:27', '2024-05-07 09:00:27'),
-	(3, 'Miss Lelia Ullrich IV', 'deven75@example.net', '2024-05-07 09:00:27', '$2y$12$Y8tFhZX6VJmPOHZbM2kZYungp0fiPY6hYxKrfYTkP4Bn5nIlLR5xC', 'staff', NULL, NULL, NULL, NULL, 'XQPju2ijLK', '2024-05-07 09:00:27', '2024-05-07 09:00:27'),
-	(4, 'Earl Gutmann', 'darren62@example.net', '2024-05-07 09:00:27', '$2y$12$Y8tFhZX6VJmPOHZbM2kZYungp0fiPY6hYxKrfYTkP4Bn5nIlLR5xC', 'staff', NULL, NULL, NULL, NULL, 'Q5IDGvY6pM', '2024-05-07 09:00:27', '2024-05-07 09:00:27'),
-	(5, 'Miss Lucile Rutherford', 'mpadberg@example.org', '2024-05-07 09:00:27', '$2y$12$Y8tFhZX6VJmPOHZbM2kZYungp0fiPY6hYxKrfYTkP4Bn5nIlLR5xC', 'staff', NULL, NULL, NULL, NULL, 'uDF77sCebx', '2024-05-07 09:00:27', '2024-05-07 09:00:27'),
-	(6, 'Dahlia Windler PhD', 'little.una@example.com', '2024-05-07 09:00:27', '$2y$12$Y8tFhZX6VJmPOHZbM2kZYungp0fiPY6hYxKrfYTkP4Bn5nIlLR5xC', 'staff', NULL, NULL, NULL, NULL, '2JjsiTvUAZ', '2024-05-07 09:00:27', '2024-05-07 09:00:27'),
-	(7, 'Wilburn Wiza', 'jayme39@example.com', '2024-05-07 09:00:27', '$2y$12$Y8tFhZX6VJmPOHZbM2kZYungp0fiPY6hYxKrfYTkP4Bn5nIlLR5xC', 'staff', NULL, NULL, NULL, NULL, 'vhCugSOtV7', '2024-05-07 09:00:27', '2024-05-07 09:00:27'),
-	(8, 'Gideon Schamberger MD', 'ortiz.jordane@example.com', '2024-05-07 09:00:27', '$2y$12$Y8tFhZX6VJmPOHZbM2kZYungp0fiPY6hYxKrfYTkP4Bn5nIlLR5xC', 'staff', NULL, NULL, NULL, NULL, 'oVaf0qRkBF', '2024-05-07 09:00:27', '2024-05-07 09:00:27'),
-	(9, 'Lindsey Wisozk', 'beer.angelina@example.org', '2024-05-07 09:00:27', '$2y$12$Y8tFhZX6VJmPOHZbM2kZYungp0fiPY6hYxKrfYTkP4Bn5nIlLR5xC', 'staff', NULL, NULL, NULL, NULL, 'AeAlUfpnvF', '2024-05-07 09:00:27', '2024-05-07 09:00:27'),
-	(10, 'Miss Emmie Bauch DDS', 'egulgowski@example.org', '2024-05-07 09:00:27', '$2y$12$Y8tFhZX6VJmPOHZbM2kZYungp0fiPY6hYxKrfYTkP4Bn5nIlLR5xC', 'staff', NULL, NULL, NULL, NULL, 'nbTAcgOxqt', '2024-05-07 09:00:27', '2024-05-07 09:00:27'),
-	(11, 'Lillie Hegmann', 'alexie54@example.com', '2024-05-07 09:00:27', '$2y$12$Y8tFhZX6VJmPOHZbM2kZYungp0fiPY6hYxKrfYTkP4Bn5nIlLR5xC', 'staff', NULL, NULL, NULL, NULL, 'sozRMkailc', '2024-05-07 09:00:27', '2024-05-07 09:00:27'),
-	(12, 'indrat', 'indrat@mail.com', NULL, '$2y$12$vQacz2J0sv09I7q1n6cK/u9UsxqJ4QGB5HmZevhm/eMnxDL.Ey.gC', 'admin', '2024-05-01', 'Male', '09988888', 'adresss ku', '9yyXa4jH5wSWpIYK0ititPBLh4w07NRWl8mlFptO', '2024-05-07 16:10:21', NULL);
+	(1, 'Test User', 'admin@admin.com', '2024-05-08 08:58:35', '$2y$12$0ZVqhPAfZZmQA6w/PFFVs.1BrdEH3D5OwMxoop3LCjPp28/kCWOVe', 'admin', NULL, NULL, NULL, NULL, 'sAwTQXc3b1', '2024-05-08 08:58:35', '2024-05-08 08:58:35'),
+	(2, 'Dr. Mateo Kilback', 'tolson@example.net', '2024-05-08 08:58:35', '$2y$12$gBB2zkhoT1bLXQYjsTh.M.o.a9nab7/ef3NRFvfk2oSViqFbQX956', 'staff', NULL, NULL, NULL, NULL, 'KvbVtuxSh0', '2024-05-08 08:58:35', '2024-05-08 08:58:35'),
+	(3, 'Boris Dietrich', 'lubowitz.lincoln@example.com', '2024-05-08 08:58:35', '$2y$12$gBB2zkhoT1bLXQYjsTh.M.o.a9nab7/ef3NRFvfk2oSViqFbQX956', 'staff', NULL, NULL, NULL, NULL, 'OMEcGZtkdQ', '2024-05-08 08:58:35', '2024-05-08 08:58:35'),
+	(4, 'Annette Schuster DDS', 'roel80@example.org', '2024-05-08 08:58:35', '$2y$12$gBB2zkhoT1bLXQYjsTh.M.o.a9nab7/ef3NRFvfk2oSViqFbQX956', 'staff', NULL, NULL, NULL, NULL, 'TKfpEXWxUS', '2024-05-08 08:58:35', '2024-05-08 08:58:35'),
+	(5, 'Prof. Malvina Tillman', 'qharber@example.net', '2024-05-08 08:58:35', '$2y$12$gBB2zkhoT1bLXQYjsTh.M.o.a9nab7/ef3NRFvfk2oSViqFbQX956', 'staff', NULL, NULL, NULL, NULL, 'O9jqr4QWoS', '2024-05-08 08:58:35', '2024-05-08 08:58:35'),
+	(6, 'Dr. Santina Nienow II', 'dshanahan@example.net', '2024-05-08 08:58:35', '$2y$12$gBB2zkhoT1bLXQYjsTh.M.o.a9nab7/ef3NRFvfk2oSViqFbQX956', 'staff', NULL, NULL, NULL, NULL, 'Rf1MjOYKR0', '2024-05-08 08:58:35', '2024-05-08 08:58:35'),
+	(7, 'Burnice Marks', 'haley.ezequiel@example.net', '2024-05-08 08:58:35', '$2y$12$gBB2zkhoT1bLXQYjsTh.M.o.a9nab7/ef3NRFvfk2oSViqFbQX956', 'staff', NULL, NULL, NULL, NULL, 't9aGnCBFV4', '2024-05-08 08:58:35', '2024-05-08 08:58:35'),
+	(8, 'Trenton Harris', 'bartoletti.katelin@example.net', '2024-05-08 08:58:35', '$2y$12$gBB2zkhoT1bLXQYjsTh.M.o.a9nab7/ef3NRFvfk2oSViqFbQX956', 'staff', NULL, NULL, NULL, NULL, 'AtZjxugtSm', '2024-05-08 08:58:35', '2024-05-08 08:58:35'),
+	(9, 'Trey Dietrich', 'camylle.mann@example.com', '2024-05-08 08:58:35', '$2y$12$gBB2zkhoT1bLXQYjsTh.M.o.a9nab7/ef3NRFvfk2oSViqFbQX956', 'staff', NULL, NULL, NULL, NULL, 'J65ivnWmbY', '2024-05-08 08:58:35', '2024-05-08 08:58:35'),
+	(10, 'Mr. Alf Tillman', 'richie38@example.org', '2024-05-08 08:58:35', '$2y$12$gBB2zkhoT1bLXQYjsTh.M.o.a9nab7/ef3NRFvfk2oSViqFbQX956', 'staff', NULL, NULL, NULL, NULL, 'BEs2Mxoh5n', '2024-05-08 08:58:35', '2024-05-08 08:58:35'),
+	(11, 'Miss Lucile Tromp Sr.', 'tyrese76@example.com', '2024-05-08 08:58:35', '$2y$12$gBB2zkhoT1bLXQYjsTh.M.o.a9nab7/ef3NRFvfk2oSViqFbQX956', 'staff', NULL, NULL, NULL, NULL, 'FYa5aJwIJK', '2024-05-08 08:58:35', '2024-05-08 08:58:35'),
+	(12, 'jojo', 'juminten@mail.com', NULL, '$2y$12$HYuzcbRPMzJAX95PuisDnuKsbln0Azq1khPP8EcEGhDjFkF/aSXl6', 'admin', '', 'Male', '08776655445', 'jalan jalan', 'yCBHS7GFcgzijiLoKB1wrafuxxT61l8pXPQNldGS', '2024-05-08 16:01:08', NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

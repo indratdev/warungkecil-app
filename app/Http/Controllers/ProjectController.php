@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MasterProject;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+
 
 class ProjectController extends Controller
 {
@@ -14,7 +17,7 @@ class ProjectController extends Controller
             'fullName' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8',
-            'bussiness_name' => 'required|unique:m_project,branch_name'
+            'business_name' => 'required|unique:m_project,branch_name'
         ]);
 
         if ($validator->fails()) {
@@ -23,58 +26,42 @@ class ProjectController extends Controller
                 ->withInput();
         }
 
-        $name = $request->input('fullName');
-        $email = $request->input('email');
-        $password = bcrypt($request->input('password'));
-        $token = $request->input('_token');
-        $bussiness_name = $request->input('bussiness_name');
-        $gender = $request->input('gender');
-        $phone = $request->input('phone');
-        $address = $request->input('address');
+        // Create user
+        $user = new User();
+        $user->name = $request->input('fullName');
+        $user->email = $request->input('email');
+        $user->password = bcrypt($request->input('password'));
+        $user->gender = $request->input('gender');
+        $user->phone = $request->input('phone');
+        $user->address = $request->input('address');
+        $user->save();
 
-        // dd($email);
-
-        // If validation passes, you can proceed to save the data.
-        $result = DB::statement("CALL sp_user_create_user(?, ?, ?, ?, ?, ?, ?, ?)", [$name, $email, $password, $token, '', $gender, $phone, $address]);
-        if ($result) {
-            // get owner id
-            $owner_id = DB::table('users')
-                ->select(DB::raw('*'))
-                ->where('email', 'like', "%" . $email . "%")
-                ->first();
-
-
-            // Perintah SQL berhasil dieksekusi
-            DB::table('m_project')->insert([
-                'name' => $bussiness_name,
-                'branch_name' => $bussiness_name,
-                'owner_id' => $owner_id->id
-            ]);
-        } else {
-            // Ada masalah saat mengeksekusi perintah SQL
+        // Check if user creation was successful
+        if (!$user->id) {
+            return redirect()->back()->with('error', 'Failed to create user!');
         }
 
+        // Create project
+        $project = new MasterProject();
+        $project->name = $request->input('business_name');
+        $project->branch_name = $request->input('business_name');
+        $project->owner_id = $user->id;
 
-        $message = 'User Created Successfully!';
+        // Validate project data
+        $projectValidator = Validator::make($project->toArray(), [
+            'name' => 'required',
+            'branch_name' => 'required|unique:m_project,branch_name'
+        ]);
 
+        if ($projectValidator->fails()) {
+            $user->delete(); // Rollback user creation
+            return redirect()->back()
+                ->withErrors($projectValidator)
+                ->withInput();
+        }
 
+        $project->save();
 
-
-
-
-
-
-        // $data = [
-        //     'email' => $request->input('email'),
-        //     'password' => $request->input('password'),
-        // ];
-
-        // if (Auth::Attempt($data)) {
-        //     return redirect('/dashboard');
-        // } else {
-
-        //     Session::flash('error', 'Email atau Password Salah');
-        //     return redirect('/');
-        // }
+        return redirect()->back()->with('success', 'User Created Successfully');
     }
 }

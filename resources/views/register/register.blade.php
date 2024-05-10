@@ -50,6 +50,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </div>
                         </div>
 
+                        @if (session()->has('success'))
+                            <div class="alert alert-success">
+                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                <strong>{{ session()->get('success') }}</strong>
+                            </div>
+                        @endif
+
+                        @if (session()->has('error'))
+                            <div class="alert alert-danger">
+                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                <strong> {{ session()->get('error') }}</strong>
+                            </div>
+                        @endif
+
                         @if ($errors->any())
                             <div class="alert alert-danger alert-dismissible fade show"
                                 style="margin: 20px 20px 20px 20px;;">
@@ -80,9 +94,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 </div>
 
                                 <div class="col-12">
-                                    <label for="bussiness_name" class="form-label">Bussiness Name<span
+                                    <label for="business_name" class="form-label">Business Name<span
                                             class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="bussiness_name" id="bussiness_name"
+                                    <input type="text" class="form-control" name="business_name" id="business_name"
                                         placeholder="PT. Example Example" required>
                                 </div>
 
@@ -140,7 +154,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <div class="row">
                             <div class="col-12">
                                 <hr class="mt-5 mb-4 border-secondary-subtle">
-                                <p class="m-0 text-secondary text-end">Already have an account? <a href="#!"
+                                <p class="m-0 text-secondary text-end">Already have an account? <a href="/"
                                         class="link-primary text-decoration-none">Sign in</a></p>
                             </div>
                         </div>

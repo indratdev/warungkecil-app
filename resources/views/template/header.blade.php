@@ -14,7 +14,6 @@
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
-        <a href="{{ url('/logout') }}"> logout </a>
         <!-- Navbar Search -->
         <li class="nav-item">
             <a class="nav-link" data-widget="navbar-search" href="#" role="button">
@@ -132,6 +131,29 @@
             <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
                 <i class="fas fa-th-large"></i>
             </a>
+        </li>
+        {{-- profile --}}
+        <li class="nav-item dropdown">
+            <a class="nav-link text-center" data-toggle="dropdown" href="#">
+                @if (Auth::check())
+                    {{ Auth::user()->name }}
+                @endif
+                <i class="fa fa-chevron-down" aria-hidden="true"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                <a href="#" class="dropdown-item">
+                    <p class="text-sm">Profile</p>
+                </a>
+
+                <a href="#" class="dropdown-item">
+                    <p class="text-sm">Change Password</p>
+                </a>
+
+                <div class="dropdown-divider"></div>
+                <a href="{{ url('/logout') }}" class="dropdown-item">
+                    <p class="text-sm">Log Out</p>
+                </a>
+            </div>
         </li>
     </ul>
 </nav>

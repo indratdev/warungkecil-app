@@ -82,7 +82,14 @@ class AdminUserController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $user = DB::table('users')->where('id', $id)->get();
+
+        $data = [
+            'content' => 'users.user_edit',
+            'data' => $user
+        ];
+
+        return view('template.wrapper', $data);
     }
 
     /**
@@ -90,7 +97,7 @@ class AdminUserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        dd($request, $id);
     }
 
     /**

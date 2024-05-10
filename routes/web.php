@@ -42,5 +42,7 @@ Route::get('/dashboard', function () {
 });
 
 Route::resource('users', AdminUserController::class);
-Route::resource('create', AdminUserController::class);
+Route::resource('profile', AdminUserController::class);
+// Route::resource('create', AdminUserController::class);
+// Route::resource('edit', AdminUserController::class);
 // Route::get('/users/create', [AdminUserController::class, 'create']);
